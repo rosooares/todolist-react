@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 import '../css/Search.css';
 
 class Search extends Component {
@@ -15,15 +18,21 @@ class Search extends Component {
    
   render() {
     return (
-      <form className="search-form">
-        <input
-          type="search"
-          onChange={this.handleChange} 
+      <form className="search-form" onSubmit={this.handleSubmit} >
+         <TextField 
+          type="text"
+          onChange={this.handleChange}
+          label="Tarefa" 
+          InputProps={{
+            startAdornment: <SearchIcon position="start" />,
+          }}
         />
-        <button onClick={this.addTarefa}>Add</button>
+        <Button type="submit" variant="contained" color="primary">
+          Add
+        </Button>
         <ul>
             {
-                this.state.tarefas.map(tarefa => <li key={tarefa.id}> {tarefa.name} </li>)
+                this.state.tarefas.map(tarefa => <li className="itemTarefa" key={tarefa.id}> {tarefa.name} </li>)
             }
         </ul>
       </form>
@@ -34,10 +43,17 @@ class Search extends Component {
     this.setState({ tarefa: { id: Math.random().toString(36).substr(-8) ,name: event.target.value }});
   }
 
-  addTarefa = () => {
+  handleSubmit = event => {
     this.setState({
-        tarefas: this.state.tarefas.concat(this.state.tarefa),
+      tarefas: [
+        ...this.state.tarefas,
+        this.state.tarefa,
+      ]
     })
+
+    // this.setState({tarefa: ''})
+
+    event.preventDefault();
   } 
 }
 
